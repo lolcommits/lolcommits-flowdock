@@ -23,10 +23,7 @@ describe Lolcommits::Plugin::Flowdock do
       # a simple lolcommits runner with an empty configuration Hash
       @runner ||= Lolcommits::Runner.new(
         main_image: Tempfile.new('main_image.jpg'),
-        config: OpenStruct.new(
-          read_configuration: {},
-          loldir: File.expand_path("#{__dir__}../../../images")
-        )
+        config: OpenStruct.new(read_configuration: {})
       )
     end
 
@@ -36,28 +33,17 @@ describe Lolcommits::Plugin::Flowdock do
 
     def valid_enabled_config
       @config ||= OpenStruct.new(
-        read_configuration: {
-          "flowdock" => {
-            "enabled" => true,
-            "endpoint" => "https://flowdock.com/uplol",
-            'optional_http_auth_username' => 'joe',
-            'optional_http_auth_password' => '1234'
-          }
-        }
+        read_configuration: { "flowdock" => flowdock_config }
       )
     end
 
-    describe "initalizing" do
-      it "assigns runner and all plugin options" do
-        plugin.runner.must_equal runner
-        plugin.options.must_equal %w(
-          enabled
-          endpoint
-          optional_key
-          optional_http_auth_username
-          optional_http_auth_password
-        )
-      end
+    def flowdock_config
+      {
+        "enabled"      => true,
+        "access_token" => "f4f6aa86fd747a00e75238810412x543",
+        'organization' => 'myorg',
+        'flow'         => 'myflow'
+      }
     end
 
     describe "#enabled?" do
@@ -75,24 +61,25 @@ describe Lolcommits::Plugin::Flowdock do
       before { commit_repo_with_message("first commit!") }
       after { teardown_repo }
 
-      it "syncs lolcommits" do
+      it "posts lolcommit as a new file message to Flowdock" do
         in_repo do
           plugin.config = valid_enabled_config
+          message_url = "https://api.flowdock.com/flows/#{flowdock_config['organization']}/#{flowdock_config['flow']}/messages"
+          valid_response = { id: "123", event: "file", tags: ["lolcommits"]}
 
-          stub_request(:post, "https://flowdock.com/uplol").to_return(status: 200)
+          stub_request(:post, message_url).to_return(status: 200, body: valid_response.to_json)
 
-          plugin.run_capture_ready
+          output = fake_io_capture do
+            plugin.run_capture_ready
+          end
 
-          assert_requested :post, "https://flowdock.com/uplol", times: 1,
-            headers: {'Content-Type' => /multipart\/form-data/ } do |req|
-            req.body.must_match(/Content-Disposition: form-data;.+name="file"; filename="main_image.jpg.+"/)
-            req.body.must_match 'name="repo"'
-            req.body.must_match 'name="author_name"'
-            req.body.must_match 'name="author_email"'
-            req.body.must_match 'name="sha"'
-            req.body.must_match 'name="key"'
-            req.body.must_match "plugin-test-repo"
-            req.body.must_match "first commit!"
+          output.must_equal "Posting to Flowdock ... done!\n"
+          assert_requested :post, message_url, times: 1, headers: {
+              'Content-Type' => /multipart\/form-data/,
+              'Host' => Lolcommits::Flowdock::Client::API_HOST
+            } do |req|
+            req.body.must_match(/Content-Disposition: form-data;.+name="content"; filename="main_image.jpg.+"/)
+            req.body.must_match(/Content-Disposition: form-data;.+name="tags\[\]"/)
           end
         end
       end
@@ -109,41 +96,44 @@ describe Lolcommits::Plugin::Flowdock do
       end
 
       it "allows plugin options to be configured" do
-        # enabled, endpoint, key, user, password
-        inputs = %w(
-          true
-          https://my-server.com/uplol
-          key-123
-          joe
-          1337pass
-        )
+        # enabled, access token, organization and flow
+        access_token = "mytoken"
         configured_plugin_options = {}
 
-        fake_io_capture(inputs: inputs) do
+        stub_request(:get, "https://api.flowdock.com/organizations").to_return(
+          status: 200,
+          body: [
+            { name: "My Org", parameterized_name: "myorgparam" },
+            { name: "Another", parameterized_name: "anotherorg" }
+          ].to_json
+        )
+
+        stub_request(:get, "https://api.flowdock.com/flows").to_return(
+          status: 200,
+          body: [
+            { name: "Flowtwo", parameterized_name: "anotherflow" },
+            { name: "My Flow", parameterized_name: "myflowparam" }
+          ].to_json
+        )
+
+        # fake readline input and redirect output to a file
+        Readline.input = File.new("./test/readline/config_input.txt", "r")
+        Readline.output = File.new("./test/readline/config_output.txt", "w+")
+        output = fake_io_capture(inputs: ["true", access_token]) do
           configured_plugin_options = plugin.configure_options!
         end
 
+        output.must_match(/Enter your Flowdock organization name \(tab to autocomplete\)/)
+        output.must_match(/e.g. Another, My Org/)
+        output.must_match(/Enter your Flowdock flow name \(tab to autocomplete\)/)
+        output.must_match(/e.g. Flowtwo, My Flow/)
+
         configured_plugin_options.must_equal({
-          "enabled" => true,
-          "endpoint" => "https://my-server.com/uplol",
-          "optional_key" => "key-123",
-          "optional_http_auth_username" => "joe",
-          "optional_http_auth_password" => "1337pass"
+          "enabled"      => true,
+          "access_token" => access_token,
+          "organization" => "myorgparam",
+          "flow"         => "myflowparam"
         })
-      end
-
-      describe "#valid_configuration?" do
-        it "returns false for an invalid configuration" do
-          plugin.config = OpenStruct.new(read_configuration: {
-            "lolsrv" => { "endpoint" => "gibberish" }
-          })
-          plugin.valid_configuration?.must_equal false
-        end
-
-        it "returns true with a valid configuration" do
-          plugin.config = valid_enabled_config
-          plugin.valid_configuration?.must_equal true
-        end
       end
     end
   end

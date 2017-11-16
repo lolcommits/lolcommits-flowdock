@@ -10,19 +10,11 @@
 every time you git commit code, and archives a lolcat style image with it. Git
 blame has never been so much fun!
 
-This plugin uploads each lolcommit to a remote server after capturing. You
-configure the plugin by setting a remote endpoint to handle the HTTP post
-request. The following params will be sent:
+This plugin automatically posts lolcommit images to a Flowdock flow (room) with
+the `#lolcommits` hashtag. They wll appear like this:
 
-* `file` - captured lolcommit image file
-* `message` - the commit message
-* `repo` - repository name e.g. mroth/lolcommits
-* `sha` - commit SHA
-* `author_name` - the commit author name
-* `author_email` - the commit author email address
-* `key` - optional key (string) from plugin config
-
-You can also set an optional HTTP Basic Auth header (username and/or password).
+![example
+commit](https://github.com/lolcommits/lolcommits-flowdock/raw/master/assets/images/example-commit.png)
 
 ## Requirements
 
@@ -30,6 +22,7 @@ You can also set an optional HTTP Basic Auth header (username and/or password).
 * A webcam
 * [ImageMagick](http://www.imagemagick.org)
 * [ffmpeg](https://www.ffmpeg.org) (optional) for animated gif capturing
+* A [Flowdock](https://www.flowdock.com) account
 
 ## Installation
 
@@ -37,15 +30,16 @@ After installing the lolcommits gem, install this plugin with:
 
     $ gem install lolcommits-flowdock
 
-Then configure to enable and set the remote endpoint:
+Then configure to enable with:
 
     $ lolcommits --config -p flowdock
     # set enabled to `true`
-    # set the remote endpoint (must begin with http(s)://)
-    # optionally set a key (sent in params) and/or HTTP Basic Auth credentials
+    # paste your Flowdock personal API token (from https://flowdock.com/account/tokens)
+    # set your Flowdock organization (tab to autocomplete)
+    # set the Flowdock flow to post messages to (tab to autocomplete)
 
-That's it! Provided the endpoint responds correctly, your next lolcommit will be
-uploaded to it. To disable use:
+That's it! Your next lolcommit will be posted as a new message to the flow. To
+disable uninstall this gem or use:
 
     $ lolcommits --config -p flowdock
     # and set enabled to `false`
@@ -56,7 +50,7 @@ Check out this repo and run `bin/setup`, this will install all dependencies and
 generate docs. Use `bundle exec rake` to run all tests and generate a coverage
 report.
 
-You can also run `bin/console` for an interactive prompt that will allow you to
+You can also run `bin/console` for an interactive prompt, allowing you to
 experiment with the gem code.
 
 ## Tests
