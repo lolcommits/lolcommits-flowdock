@@ -54,11 +54,9 @@ module Lolcommits
           access_token = gets.strip
           flowdock.access_token = access_token
 
-          puts "\nEnter your Flowdock organization name (tab to autocomplete)"
-          organization = prompt_autocomplete_hash("Organization: ", flowdock.organizations)
-
-          puts "\nEnter your Flowdock flow name (tab to autocomplete)"
-          flow = prompt_autocomplete_hash("Flow: ", flowdock.flows)
+          organization = configure_organization
+          flow         = configure_flow
+          raise Interrupt unless flow && organization
 
           options.merge!(
             'access_token' => access_token,
@@ -66,11 +64,7 @@ module Lolcommits
             'organization' => organization
           )
         end
-      rescue Interrupt
-        debug "aborting due to user cancelling configuration"
-        options ||= {}
-        options['enabled'] = false
-      ensure
+
         options
       end
 
@@ -102,6 +96,28 @@ module Lolcommits
 
 
       private
+
+      def configure_organization
+        orgs = flowdock.organizations
+        if orgs.empty?
+          puts "\nNo Flowdock organizations found, please check your account at flowdock.com"
+          nil
+        else
+          puts "\nEnter your Flowdock organization name (tab to autocomplete, Ctrl+c cancels)"
+          prompt_autocomplete_hash("Organization: ", orgs)
+        end
+      end
+
+      def configure_flow
+        flows = flowdock.flows
+        if flows.empty?
+          puts "\nNo Flowdock flows found, please check your account at flowdock.com"
+          nil
+        else
+          puts "\nEnter your Flowdock flow name (tab to autocomplete, Ctrl+c cancels)"
+          prompt_autocomplete_hash("Flow: ", flows)
+        end
+      end
 
       def prompt_autocomplete_hash(prompt, items, name: 'name', value: 'parameterized_name', suggest_words: 5)
         words = items.map {|item| item[name] }.sort

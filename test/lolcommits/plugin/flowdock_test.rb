@@ -123,9 +123,9 @@ describe Lolcommits::Plugin::Flowdock do
           configured_plugin_options = plugin.configure_options!
         end
 
-        output.must_match(/Enter your Flowdock organization name \(tab to autocomplete\)/)
+        output.must_match(/Enter your Flowdock organization name \(tab to autocomplete, Ctrl\+c cancels\)/)
         output.must_match(/e.g. Another, My Org/)
-        output.must_match(/Enter your Flowdock flow name \(tab to autocomplete\)/)
+        output.must_match(/Enter your Flowdock flow name \(tab to autocomplete, Ctrl\+c cancels\)/)
         output.must_match(/e.g. Flowtwo, My Flow/)
 
         configured_plugin_options.must_equal({
