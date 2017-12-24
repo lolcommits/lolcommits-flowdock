@@ -104,7 +104,7 @@ module Lolcommits
           nil
         else
           puts "\nEnter your Flowdock organization name (tab to autocomplete, Ctrl+c cancels)"
-          prompt_autocomplete_hash("Organization: ", orgs)
+          prompt_autocomplete_hash("Organization: ", orgs, value: "parameterized_name")
         end
       end
 
@@ -115,28 +115,7 @@ module Lolcommits
           nil
         else
           puts "\nEnter your Flowdock flow name (tab to autocomplete, Ctrl+c cancels)"
-          prompt_autocomplete_hash("Flow: ", flows)
-        end
-      end
-
-      def prompt_autocomplete_hash(prompt, items, name: 'name', value: 'parameterized_name', suggest_words: 5)
-        words = items.map {|item| item[name] }.sort
-        puts "e.g. #{words.take(suggest_words).join(", ")}" if suggest_words > 0
-        completed_input = gets_autocomplete(prompt, words)
-        items.find { |item| item[name] == completed_input }[value]
-      end
-
-      def gets_autocomplete(prompt, words)
-        completion_handler = proc { |s| words.grep(/^#{Regexp.escape(s)}/) }
-        Readline.completion_append_character = ""
-        Readline.completion_proc = completion_handler
-
-        while line = Readline.readline(prompt, true).strip
-          if words.include?(line)
-            return line
-          else
-            puts "'#{line}' not found"
-          end
+          prompt_autocomplete_hash("Flow: ", flows, value: "parameterized_name")
         end
       end
 
