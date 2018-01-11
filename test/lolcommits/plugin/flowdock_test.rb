@@ -6,14 +6,6 @@ describe Lolcommits::Plugin::Flowdock do
   include Lolcommits::TestHelpers::GitRepo
   include Lolcommits::TestHelpers::FakeIO
 
-  def plugin_name
-    "flowdock"
-  end
-
-  it "should have a name" do
-    ::Lolcommits::Plugin::Flowdock.name.must_equal plugin_name
-  end
-
   it "should run on capture ready" do
     ::Lolcommits::Plugin::Flowdock.runner_order.must_equal [:capture_ready]
   end
@@ -31,28 +23,22 @@ describe Lolcommits::Plugin::Flowdock do
       @plugin ||= Lolcommits::Plugin::Flowdock.new(runner: runner)
     end
 
-    def valid_enabled_config
-      @config ||= OpenStruct.new(
-        read_configuration: { "flowdock" => flowdock_config }
-      )
-    end
-
-    def flowdock_config
+    def plugin_config
       {
-        "enabled"      => true,
-        "access_token" => "f4f6aa86fd747a00e75238810412x543",
-        'organization' => 'myorg',
-        'flow'         => 'myflow'
+        enabled: true,
+        access_token: "f4f6aa86fd747a00e75238810412x543",
+        organization: "myorg",
+        flow: "myflow"
       }
     end
 
     describe "#enabled?" do
-      it "is false by default" do
-        plugin.enabled?.must_equal false
+      it "is not enabled by default" do
+        assert_nil plugin.enabled?
       end
 
       it "is true when configured" do
-        plugin.config = valid_enabled_config
+        plugin.configuration = plugin_config
         plugin.enabled?.must_equal true
       end
     end
@@ -63,8 +49,8 @@ describe Lolcommits::Plugin::Flowdock do
 
       it "posts lolcommit as a new file message to Flowdock" do
         in_repo do
-          plugin.config = valid_enabled_config
-          message_url = "https://api.flowdock.com/flows/#{flowdock_config['organization']}/#{flowdock_config['flow']}/messages"
+          plugin.configuration = plugin_config
+          message_url = "https://api.flowdock.com/flows/#{plugin_config[:organization]}/#{plugin_config[:flow]}/messages"
           valid_response = { id: "123", event: "file", tags: ["lolcommits"]}
 
           stub_request(:post, message_url).to_return(status: 200, body: valid_response.to_json)
@@ -86,15 +72,6 @@ describe Lolcommits::Plugin::Flowdock do
     end
 
     describe "configuration" do
-      it "returns false when not configured" do
-        plugin.configured?.must_equal false
-      end
-
-      it "returns true when configured" do
-        plugin.config = valid_enabled_config
-        plugin.configured?.must_equal true
-      end
-
       it "allows plugin options to be configured" do
         # enabled, access token, organization and flow
         access_token = "mytoken"
@@ -129,10 +106,10 @@ describe Lolcommits::Plugin::Flowdock do
         output.must_match(/e.g. Flowtwo, My Flow/)
 
         configured_plugin_options.must_equal({
-          "enabled"      => true,
-          "access_token" => access_token,
-          "organization" => "myorgparam",
-          "flow"         => "myflowparam"
+          enabled: true,
+          access_token: access_token,
+          organization: "myorgparam",
+          flow: "myflowparam"
         })
       end
     end
