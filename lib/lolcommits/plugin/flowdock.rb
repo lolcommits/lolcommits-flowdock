@@ -8,15 +8,6 @@ module Lolcommits
     class Flowdock < Base
 
       ##
-      # Returns the name of the plugin. Identifies the plugin to lolcommits.
-      #
-      # @return [String] the plugin name
-      #
-      def self.name
-        'flowdock'
-      end
-
-      ##
       # Returns position(s) of when this plugin should run during the capture
       # process. Posting to Flowdock happens when a new capture is ready.
       #
@@ -24,18 +15,6 @@ module Lolcommits
       #
       def self.runner_order
         [:capture_ready]
-      end
-
-      ##
-      # Returns true if the plugin has been configured. An access token,
-      # organization and flow must be set.
-      #
-      # @return [Boolean] true/false indicating if plugin is configured
-      #
-      def configured?
-        !!(configuration['access_token'] &&
-           configuration['organization'] &&
-           configuration['flow'])
       end
 
       ##
@@ -47,7 +26,7 @@ module Lolcommits
       #
       def configure_options!
         options = super
-        if options['enabled']
+        if options[:enabled]
           puts "\nCopy (or create) your Flowdock personal API token (paste it below)"
           open_url("https://flowdock.com/account/tokens")
           print "API token: "
@@ -59,9 +38,9 @@ module Lolcommits
           raise Interrupt unless flow && organization
 
           options.merge!(
-            'access_token' => access_token,
-            'flow'         => flow,
-            'organization' => organization
+            access_token: access_token,
+            flow: flow,
+            organization: organization
           )
         end
 
@@ -78,8 +57,8 @@ module Lolcommits
       def run_capture_ready
         print "Posting to Flowdock ... "
         message = flowdock.create_message(
-          organization: configuration['organization'],
-          flow: configuration['flow'],
+          organization: configuration[:organization],
+          flow: configuration[:flow],
           params: {
             event: 'file',
             content: File.new(runner.main_image),
@@ -104,7 +83,7 @@ module Lolcommits
           nil
         else
           puts "\nEnter your Flowdock organization name (tab to autocomplete, Ctrl+c cancels)"
-          prompt_autocomplete_hash("Organization: ", orgs)
+          prompt_autocomplete_hash("Organization: ", orgs, value: "parameterized_name")
         end
       end
 
@@ -115,28 +94,7 @@ module Lolcommits
           nil
         else
           puts "\nEnter your Flowdock flow name (tab to autocomplete, Ctrl+c cancels)"
-          prompt_autocomplete_hash("Flow: ", flows)
-        end
-      end
-
-      def prompt_autocomplete_hash(prompt, items, name: 'name', value: 'parameterized_name', suggest_words: 5)
-        words = items.map {|item| item[name] }.sort
-        puts "e.g. #{words.take(suggest_words).join(", ")}" if suggest_words > 0
-        completed_input = gets_autocomplete(prompt, words)
-        items.find { |item| item[name] == completed_input }[value]
-      end
-
-      def gets_autocomplete(prompt, words)
-        completion_handler = proc { |s| words.grep(/^#{Regexp.escape(s)}/) }
-        Readline.completion_append_character = ""
-        Readline.completion_proc = completion_handler
-
-        while line = Readline.readline(prompt, true).strip
-          if words.include?(line)
-            return line
-          else
-            puts "'#{line}' not found"
-          end
+          prompt_autocomplete_hash("Flow: ", flows, value: "parameterized_name")
         end
       end
 
@@ -146,7 +104,7 @@ module Lolcommits
 
       def flowdock
         @flowdock ||= Lolcommits::Flowdock::Client.new(
-          configuration['access_token']
+          configuration[:access_token]
         )
       end
     end
