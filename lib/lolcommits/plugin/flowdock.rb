@@ -8,16 +8,6 @@ module Lolcommits
     class Flowdock < Base
 
       ##
-      # Returns position(s) of when this plugin should run during the capture
-      # process. Posting to Flowdock happens when a new capture is ready.
-      #
-      # @return [Array] the position(s) (:capture_ready)
-      #
-      def self.runner_order
-        [:capture_ready]
-      end
-
-      ##
       # Prompts the user to configure plugin options. Options are enabled
       # (true/false), a Flowdock Personal API token, and the Flowdock
       # organization and flow names.
