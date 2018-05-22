@@ -1,10 +1,10 @@
 # Lolcommits Flowdock
 
-[![Gem Version](https://img.shields.io/gem/v/lolcommits-flowdock.svg?style=flat)](http://rubygems.org/gems/lolcommits-flowdock)
-[![Travis Build Status](https://travis-ci.org/lolcommits/lolcommits-flowdock.svg?branch=master)](https://travis-ci.org/lolcommits/lolcommits-flowdock)
+[![Gem](https://img.shields.io/gem/v/lolcommits-flowdock.svg?style=flat)](http://rubygems.org/gems/lolcommits-flowdock)
+[![Travis](https://travis-ci.org/lolcommits/lolcommits-flowdock.svg?branch=master)](https://travis-ci.org/lolcommits/lolcommits-flowdock)
+[![Depfu](https://img.shields.io/depfu/lolcommits/lolcommits-flowdock.svg?style=flat)](https://depfu.com/github/lolcommits/lolcommits-flowdock)
 [![Maintainability](https://api.codeclimate.com/v1/badges/ad7324f710e10daffd52/maintainability)](https://codeclimate.com/github/lolcommits/lolcommits-flowdock/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/ad7324f710e10daffd52/test_coverage)](https://codeclimate.com/github/lolcommits/lolcommits-flowdock/test_coverage)
-[![Gem Dependency Status](https://gemnasium.com/badges/github.com/lolcommits/lolcommits-flowdock.svg)](https://gemnasium.com/github.com/lolcommits/lolcommits-flowdock)
 
 [lolcommits](https://lolcommits.github.io/) takes a snapshot with your webcam
 every time you git commit code, and archives a lolcat style image with it. Git
