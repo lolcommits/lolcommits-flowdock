@@ -18,6 +18,13 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/lolcommits/lolcommits-flowdock"
   spec.license       = "LGPL-3"
 
+  spec.metadata = {
+    "homepage_uri"    => "https://github.com/lolcommits/lolcommits-flowdock",
+    "changelog_uri"   => "https://github.com/lolcommits/lolcommits-flowdock/blob/master/CHANGELOG.md",
+    "source_code_uri" => "https://github.com/lolcommits/lolcommits-flowdock",
+    "bug_tracker_uri" => "https://github.com/lolcommits/lolcommits-flowdock/issues",
+  }
+
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
   if spec.respond_to?(:metadata)
