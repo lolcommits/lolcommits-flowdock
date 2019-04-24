@@ -1,22 +1,20 @@
-# coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'lolcommits/flowdock/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "lolcommits-flowdock"
-  spec.version       = Lolcommits::Flowdock::VERSION
-  spec.authors       = ["Matthew Hutchinson"]
-  spec.email         = ["matt@hiddenloop.com"]
-  spec.summary       = %q{Posts lolcommits to Flowdockr}
+  spec.name     = "lolcommits-flowdock"
+  spec.version  = Lolcommits::Flowdock::VERSION
+  spec.authors  = ["Matthew Hutchinson"]
+  spec.email    = ["matt@hiddenloop.com"]
+  spec.summary  = %q{Posts lolcommits to Flowdockr}
+  spec.homepage = "https://github.com/lolcommits/lolcommits-flowdock"
+  spec.license  = "LGPL-3"
 
-  spec.description = <<-EOF
+  spec.description = <<-DESC
   Automatically posts lolcommit images to a Flowdock flow (room) with the
   #lolcommits hashtag.
-  EOF
-
-  spec.homepage      = "https://github.com/lolcommits/lolcommits-flowdock"
-  spec.license       = "LGPL-3"
+  DESC
 
   spec.metadata = {
     "homepage_uri"    => "https://github.com/lolcommits/lolcommits-flowdock",
