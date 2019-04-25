@@ -1,7 +1,7 @@
 # Lolcommits Flowdock
 
 [![Gem](https://img.shields.io/gem/v/lolcommits-flowdock.svg?style=flat)](http://rubygems.org/gems/lolcommits-flowdock)
-[![Travis](https://travis-ci.org/lolcommits/lolcommits-flowdock.svg?branch=master)](https://travis-ci.org/lolcommits/lolcommits-flowdock)
+[![Travis](https://img.shields.io/travis/com/lolcommits/lolcommits-flowdock/master.svg?style=flat)](https://travis-ci.com/lolcommits/lolcommits-flowdock)
 [![Depfu](https://img.shields.io/depfu/lolcommits/lolcommits-flowdock.svg?style=flat)](https://depfu.com/github/lolcommits/lolcommits-flowdock)
 [![Maintainability](https://api.codeclimate.com/v1/badges/ad7324f710e10daffd52/maintainability)](https://codeclimate.com/github/lolcommits/lolcommits-flowdock/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/ad7324f710e10daffd52/test_coverage)](https://codeclimate.com/github/lolcommits/lolcommits-flowdock/test_coverage)
@@ -79,7 +79,7 @@ GitHub.
 
 When submitting pull requests, remember to add tests covering any new behaviour,
 and ensure all tests are passing on [Travis
-CI](https://travis-ci.org/lolcommits/lolcommits-flowdock). Read the
+CI](https://travis-ci.com/lolcommits/lolcommits-flowdock). Read the
 [contributing
 guidelines](https://github.com/lolcommits/lolcommits-flowdock/blob/master/CONTRIBUTING.md)
 for more details.
@@ -97,7 +97,7 @@ The gem is available as open source under the terms of
 
 ## Links
 
-* [Travis CI](https://travis-ci.org/lolcommits/lolcommits-flowdock)
+* [Travis CI](https://travis-ci.com/lolcommits/lolcommits-flowdock)
 * [Test Coverage](https://codeclimate.com/github/lolcommits/lolcommits-flowdock/test_coverage)
 * [Maintainability](https://codeclimate.com/github/lolcommits/lolcommits-flowdock/maintainability)
 * [RDoc](http://rdoc.info/projects/lolcommits/lolcommits-flowdock)
