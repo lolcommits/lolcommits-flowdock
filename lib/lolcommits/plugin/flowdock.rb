@@ -53,7 +53,7 @@ module Lolcommits
           flow: configuration[:flow],
           params: {
             event: 'file',
-            content: File.new(runner.main_image),
+            content: File.new(runner.lolcommit_path),
             tags: %w(lolcommits)
           }
         )

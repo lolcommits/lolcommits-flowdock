@@ -12,8 +12,7 @@ describe Lolcommits::Plugin::Flowdock do
     def runner
       # a simple lolcommits runner with an empty configuration Hash
       @runner ||= Lolcommits::Runner.new(
-        main_image: Tempfile.new('main_image.jpg'),
-        config: OpenStruct.new(read_configuration: {})
+        lolcommit_path: Tempfile.new('lolcommit.jpg')
       )
     end
 
@@ -62,7 +61,7 @@ describe Lolcommits::Plugin::Flowdock do
               'Content-Type' => /multipart\/form-data/,
               'Host' => Lolcommits::Flowdock::Client::API_HOST
             } do |req|
-            req.body.must_match(/Content-Disposition: form-data;.+name="content"; filename="main_image.jpg.+"/)
+            req.body.must_match(/Content-Disposition: form-data;.+name="content"; filename="lolcommit.jpg.+"/)
             req.body.must_match(/Content-Disposition: form-data;.+name="tags\[\]"/)
           end
         end
