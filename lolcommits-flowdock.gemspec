@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email    = ["matt@hiddenloop.com"]
   spec.summary  = %q{Posts lolcommits to Flowdockr}
   spec.homepage = "https://github.com/lolcommits/lolcommits-flowdock"
-  spec.license  = "LGPL-3"
+  spec.license  = "LGPL-3.0"
 
   spec.description = <<-DESC
   Automatically posts lolcommit images to a Flowdock flow (room) with the
@@ -17,20 +17,12 @@ Gem::Specification.new do |spec|
   DESC
 
   spec.metadata = {
-    "homepage_uri"    => "https://github.com/lolcommits/lolcommits-flowdock",
-    "changelog_uri"   => "https://github.com/lolcommits/lolcommits-flowdock/blob/master/CHANGELOG.md",
-    "source_code_uri" => "https://github.com/lolcommits/lolcommits-flowdock",
-    "bug_tracker_uri" => "https://github.com/lolcommits/lolcommits-flowdock/issues",
+    "homepage_uri"      => "https://github.com/lolcommits/lolcommits-flowdock",
+    "changelog_uri"     => "https://github.com/lolcommits/lolcommits-flowdock/blob/master/CHANGELOG.md",
+    "source_code_uri"   => "https://github.com/lolcommits/lolcommits-flowdock",
+    "bug_tracker_uri"   => "https://github.com/lolcommits/lolcommits-flowdock/issues",
+    "allowed_push_host" => "https://rubygems.org"
   }
-
-  # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
-  # to allow pushing to a single host or delete this section to allow pushing to any host.
-  if spec.respond_to?(:metadata)
-    spec.metadata['allowed_push_host'] = "https://rubygems.org"
-  else
-    raise "RubyGems 2.0 or newer is required to protect against " \
-      "public gem pushes."
-  end
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(assets|test|features)/}) }
   spec.test_files    = `git ls-files -- {test,features}/*`.split("\n")
@@ -41,7 +33,7 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = ">= 2.3"
 
   spec.add_runtime_dependency "rest-client"
-  spec.add_runtime_dependency "lolcommits", "~> 0.14.1"
+  spec.add_runtime_dependency "lolcommits", "~> 0.14.2"
 
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "webmock"
