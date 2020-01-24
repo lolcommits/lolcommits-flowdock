@@ -31,12 +31,12 @@ describe Lolcommits::Plugin::Flowdock do
 
     describe "#enabled?" do
       it "is not enabled by default" do
-        plugin.enabled?.must_equal false
+        _(plugin.enabled?).must_equal false
       end
 
       it "is true when configured" do
         plugin.configuration = plugin_config
-        plugin.enabled?.must_equal true
+        _(plugin.enabled?).must_equal true
       end
     end
 
@@ -56,13 +56,13 @@ describe Lolcommits::Plugin::Flowdock do
             plugin.run_capture_ready
           end
 
-          output.must_equal "Posting to Flowdock ... done!\n"
+          _(output).must_equal "Posting to Flowdock ... done!\n"
           assert_requested :post, message_url, times: 1, headers: {
               'Content-Type' => /multipart\/form-data/,
               'Host' => Lolcommits::Flowdock::Client::API_HOST
             } do |req|
-            req.body.must_match(/Content-Disposition: form-data;.+name="content"; filename="lolcommit.jpg.+"/)
-            req.body.must_match(/Content-Disposition: form-data;.+name="tags\[\]"/)
+            _(req.body).must_match(/Content-Disposition: form-data;.+name="content"; filename="lolcommit.jpg.+"/)
+            _(req.body).must_match(/Content-Disposition: form-data;.+name="tags\[\]"/)
           end
         end
       end
@@ -97,12 +97,12 @@ describe Lolcommits::Plugin::Flowdock do
           configured_plugin_options = plugin.configure_options!
         end
 
-        output.must_match(/Enter your Flowdock organization name \(tab to autocomplete, Ctrl\+c cancels\)/)
-        output.must_match(/e.g. Another, My Org/)
-        output.must_match(/Enter your Flowdock flow name \(tab to autocomplete, Ctrl\+c cancels\)/)
-        output.must_match(/e.g. Flowtwo, My Flow/)
+        _(output).must_match(/Enter your Flowdock organization name \(tab to autocomplete, Ctrl\+c cancels\)/)
+        _(output).must_match(/e.g. Another, My Org/)
+        _(output).must_match(/Enter your Flowdock flow name \(tab to autocomplete, Ctrl\+c cancels\)/)
+        _(output).must_match(/e.g. Flowtwo, My Flow/)
 
-        configured_plugin_options.must_equal({
+        _(configured_plugin_options).must_equal({
           enabled: true,
           access_token: access_token,
           organization: "myorgparam",
